@@ -23,7 +23,7 @@ public:
 		begin = clock_t::now();
 	}
 	void print() const {
-		std::cout << _name << "\t\t" << elapsed() * 1000 << " ms" << std::endl;
+		std::cout << _name << "\t\t\t\t" << elapsed() * 1000 << " ms" << std::endl;
 	}
 };
 

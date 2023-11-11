@@ -16,32 +16,35 @@ void print_headers() {
 	std::cout << "#\t\tId\t\tProgress Bar\t\tTime\n\n";
 }
 
-void DrawProgressBar() {
+void DrawProgressBar(int i) {
+	Timer timer;
 	system("color 0A");
 	//initialize char to print bar
 	char a = 176, b = 219; //221
-	for (int i = 0; i < 10; ++i) {
-		std::cout << a;
+	int x = std::rand() % 10000;
+	timer.start();
+	for (int k = 0; k < 10; ++k) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(x));
+		std::unique_lock lk(m);
+		consol_parameter::SetPosition(30+k, 2+i);
+		//lk.unlock();
+		std::cout << b;
+		Sleep(200);
 	}
-	std::cout << "\r";
-	for (int i = 0; i < 10; ++i) {
-		std::cout << i;
-		Sleep(500);
-	}
-	std::cout << std::endl;
+	std::this_thread::sleep_for(500ms);
+	std::unique_lock lk(m);
+	consol_parameter::SetPosition(30, 2 + i);
+	//lk.unlock();
+	timer.print();
 }
 void LoadBar(int i, int N) {
 	//сюда заходят сразу все 4 потока
 	std::call_once(once, print_headers);
-	Timer timer;
 	std::unique_lock lk(m);	
 	std::cout << i << "\t\t" << std::this_thread::get_id() << "\n";
 	lk.unlock();
-	timer.start();
-	//...to do
-	std::this_thread::sleep_for(2000ms);
-	DrawProgressBar();
-	timer.print();
+	DrawProgressBar(i);
+	
 }
 
 void task() {
@@ -52,7 +55,7 @@ void task() {
 	}
 	for (auto& el : vt) {
 		el.join();
-		consol_parameter::SetPosition(0, 6);
+		//consol_parameter::SetPosition(0, 6);
 	}
 }
 
